@@ -1,4 +1,4 @@
-const data = require("../../../data");
+const data = require("../../../sqlite3-data");
 
 module.exports = (req, res) => {
     let body = '';
@@ -7,7 +7,7 @@ module.exports = (req, res) => {
         body += chunk;
     })
 
-    req.on('end', () => {
+    req.on('end', async () => {
         const parsedBody = new URLSearchParams(body);
         const name = parsedBody.get('name');
         const age = parsedBody.get('age');
@@ -15,9 +15,10 @@ module.exports = (req, res) => {
         if (name && age) {
             const user = {name, age: parseInt(age)};
 
-            data.addUser(user);
+            const createdUser = await data.addUser(user);
+
             res.writeHead(201);
-            res.end(JSON.stringify(user));
+            res.end(JSON.stringify(createdUser));
         } else {
             res.writeHead(400);
             res.end(JSON.stringify({message: 'Name and age are required'}));

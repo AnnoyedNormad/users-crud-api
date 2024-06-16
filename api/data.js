@@ -1,11 +1,7 @@
 let users = [];
 let currentId = 1;
 
-function Err(errText) {
-    this.Error = errText;
-}
-
-const ErrNotFound = new Err("User not found!")
+const ErrNotFound = {Message: "User not found!"}
 
 module.exports = {
     addUser: (user) => {
